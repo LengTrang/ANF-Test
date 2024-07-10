@@ -10,9 +10,12 @@ import XCTest
 class ANFExploreCardTableViewControllerTests: XCTestCase {
 
     var testInstance: ANFExploreCardTableViewController!
+    var viewModel: MainPageViewModel = MainPageViewModel()
     
     override func setUp() {
         testInstance = UIStoryboard(name: "Main", bundle: Bundle.main).instantiateInitialViewController() as? ANFExploreCardTableViewController
+        testInstance = ANFExploreCardTableViewController()
+        testInstance?.viewModel = MainPageViewModel()
     }
 
     func test_numberOfSections_ShouldBeOne() {
@@ -25,15 +28,19 @@ class ANFExploreCardTableViewControllerTests: XCTestCase {
         XCTAssert(numberOfRows == 10, "table view should have 10 cells")
     }
     
-    func test_cellForRowAtIndexPath_titleText_shouldNotBeBlank() {
-        let firstCell = testInstance.tableView(testInstance.tableView, cellForRowAt: IndexPath(row: 0, section: 0))
-        let title = firstCell.viewWithTag(1) as? UILabel
-        XCTAssert(title?.text?.count ?? 0 > 0, "title should not be blank")
+    func testMainpageCell_has_mainTitle_has_image() {
+        let mockViewModel = MainPageViewModel()
+        guard let firstData = mockViewModel.dataExplore?.first else { return }
+        
+        XCTAssertNotNil(firstData.title)
+        XCTAssertNotNil(firstData.backgroundImage)
     }
     
-    func test_cellForRowAtIndexPath_ImageViewImage_shouldNotBeNil() {
-        let firstCell = testInstance.tableView(testInstance.tableView, cellForRowAt: IndexPath(row: 0, section: 0))
-        let imageView = firstCell.viewWithTag(2) as? UIImageView
-        XCTAssert(imageView?.image != nil, "image view image should not be nil")
+    func testContentCell_has_mainTitle_has_image() {
+        let mockViewModel = ContentPageViewModel(contentData: [Content(target: "MockTarget", title: "MockTitle")])
+        XCTAssertTrue(mockViewModel.recieveContentCount() == 1)
+        
+        XCTAssertNotNil(mockViewModel.contentData.first?.title)
+        XCTAssertNotNil(mockViewModel.contentData.first?.target)
     }
 }

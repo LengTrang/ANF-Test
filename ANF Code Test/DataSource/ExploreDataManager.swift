@@ -17,8 +17,6 @@ class ExploreDataManager {
     
     weak var delegate: ExploreDataProtocol?
     
-    init() {
-    }
     func loadData() {
         if let filePath = Bundle.main.path(forResource: "exploreData", ofType: "json"),
            let fileContent = try? Data(contentsOf: URL(fileURLWithPath: filePath)),

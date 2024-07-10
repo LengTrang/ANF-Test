@@ -6,39 +6,23 @@
 import UIKit
 
 class ANFExploreCardTableViewController: UITableViewController {
-    
-    var dataExplore: [ExploreData]?
-    var exploreManager: ExploreDataManager?
+
+    var viewModel = MainPageViewModel()
     
     override func viewDidLoad() {
-        exploreManager = ExploreDataManager()
-        exploreManager?.delegate = self
-        exploreManager?.loadData()
+        super.viewDidLoad()
+        viewModel.viewController = self
     }
     
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        dataExplore?.count ?? 0
+        viewModel.recieveContentCount()
     }
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = self.tableView.dequeueReusableCell(withIdentifier: "ExploreContentCell", for: indexPath)
-        if let titleLabel = cell.viewWithTag(1) as? UILabel,
-           let titleText = dataExplore?[indexPath.row].title as? String {
-            titleLabel.text = titleText
-        }
-        
-        if let imageView = cell.viewWithTag(2) as? UIImageView,
-           let name = dataExplore?[indexPath.row].backgroundImage as? String,
-           let image = UIImage(named: name) {
-            imageView.image = image
-        }
-        
-        return cell
+        return viewModel.createCellAtIndex(tableView: tableView, indexPath: indexPath)
     }
-}
-
-extension ANFExploreCardTableViewController: ExploreDataProtocol {
-    func receiveData(data: [ExploreData]?) {
-        dataExplore = data
+    
+    override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        viewModel.recieveRowHight(indexPath: indexPath)
     }
 }

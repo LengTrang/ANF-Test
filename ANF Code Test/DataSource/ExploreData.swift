@@ -8,7 +8,7 @@
 import Foundation
 
 struct ExploreData: Decodable {
-    let title: String
+    let title: String?
     let backgroundImage: String?
     let content: [Content]?
     let promoMessage: String?
